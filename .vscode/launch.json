@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch via npm",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceRoot}",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": ["nest","start", "--watch"],
+            // "outFiles": [
+            //     "${workspaceFolder}/**/*.js",
+                
+            // ]
+              
+            
+        }
+    ]
+}
