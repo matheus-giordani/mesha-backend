@@ -1,4 +1,4 @@
-# Mesha backend
+# Mesha Backend
 ## Comandos pra iniciar projeto
 >```docker compose up```
 
