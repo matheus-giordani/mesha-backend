@@ -33,11 +33,12 @@ services:
       - 3000:3000
     networks:
       - postgresql-network
+    volumes:
+      - .:/usr/api/prisma
     command: >
         sh -c "/usr/local/bin/wait-for-it.sh dockerpostgresql:5432 --timeout=60 &&
-        ls &&
         npx prisma migrate dev --name init &&
-        npm start"
+        npx nest start --watch"
     depends_on:
     - postgresql
     mem_limit: 512m
