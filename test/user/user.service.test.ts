@@ -7,10 +7,15 @@ import { PrismaService } from './../../src/common/prisma.service';
 import { UserService } from './../../src/user/user.service';
 import { returnMockGetAll } from './../mock/userService/userGetAll.mock';
 import {
-  MockRegisteredUser, mockUser,
-  returnMockCreate
+  MockRegisteredUser,
+  mockUser,
+  returnMockCreate,
 } from './../mock/userService/userPost.mock';
-import { putUserMock, returnPutExistingUser, returnPutMock } from './../mock/userService/userPut.mock';
+import {
+  putUserMock,
+  returnPutExistingUser,
+  returnPutMock,
+} from './../mock/userService/userPut.mock';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -20,23 +25,20 @@ describe('UserService', () => {
       findUnique: jest.fn(),
       create: jest.fn(),
       update: jest.fn(),
-      
     },
-    conhecimento:{
+    conhecimento: {
       createMany: jest.fn(),
       deleteMany: jest.fn(),
-    }
-  }
+    },
+  };
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [ UserService, PrismaService,]
-      
+      providers: [UserService, PrismaService],
     })
-    .overrideProvider(PrismaService)
-    .useValue(prismaService)
-    .compile();
+      .overrideProvider(PrismaService)
+      .useValue(prismaService)
+      .compile();
     userService = moduleRef.get<UserService>(UserService);
-    
   });
 
   describe('getAll', () => {
@@ -100,37 +102,30 @@ describe('UserService', () => {
 
   describe('put', () => {
     it('should update and return user', async () => {
-      const copyMock = {...returnPutMock}
+      const copyMock = { ...returnPutMock };
 
-      jest.spyOn(prismaService.conhecimento, 'deleteMany')
+      jest.spyOn(prismaService.conhecimento, 'deleteMany');
       jest
         .spyOn(prismaService.user, 'findUnique')
         .mockResolvedValue(returnPutExistingUser);
-        jest.spyOn(prismaService.user, 'update').mockResolvedValue(returnPutMock)
+      jest.spyOn(prismaService.user, 'update').mockResolvedValue(returnPutMock);
 
-      const result = await userService.put(putUserMock.id,putUserMock);
+      const result = await userService.put(putUserMock.id, putUserMock);
 
-      expect(result).toStrictEqual(copyMock)
+      expect(result).toStrictEqual(copyMock);
       expect(prismaService.conhecimento.deleteMany).toBeCalledWith({
         where: { userId: putUserMock.id },
-      })
-     
+      });
     });
 
-
     it('should return NotFoundException error', async () => {
-      const copyMock = {...returnPutMock}
+      const copyMock = { ...returnPutMock };
 
-      
-      jest
-        .spyOn(prismaService.user, 'findUnique')
-        .mockResolvedValue(null);
-     
-      
+      jest.spyOn(prismaService.user, 'findUnique').mockResolvedValue(null);
 
-      expect(userService.put(putUserMock.id,putUserMock)).rejects.toThrowError(NotFoundException)
-      
-     
+      expect(userService.put(putUserMock.id, putUserMock)).rejects.toThrowError(
+        NotFoundException,
+      );
     });
   });
 });
