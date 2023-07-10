@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from "./../../src/app.module";
 import * as supertest from 'supertest';
 import { UserService } from './../../src/user/user.service';
-import { getAllMock } from "./../mock/userController/getAllController.mock";
+import { getAllMock } from "./../mock/usercontroller/getAllController.mock";
 import { returnMockGetAll } from "./../mock/userService/userGetAll.mock";
 import { returnMockGet } from "./../mock/userService/userGet.mock";
 import { getMock } from "./../mock/usercontroller/getController.mock";
