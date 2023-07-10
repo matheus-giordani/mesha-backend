@@ -9,11 +9,16 @@ export class UserService {
   async post(CreateUser) {
     const { conhecimentos, ...userData } = CreateUser;
 
-    const allUsers = await this.getAll()
+    const allUsers = await this.getAll();
     // procura cpf existente na base de dados
-    const userFinded = allUsers.find( user =>{ return user.cpf === CreateUser.cpf})
-    if(userFinded){
-      throw new ApiError([{cause:"CPF já cadastrado na base de dados"}], HttpStatus.CONFLICT)
+    const userFinded = allUsers.find((user) => {
+      return user.cpf === CreateUser.cpf;
+    });
+    if (userFinded) {
+      throw new ApiError(
+        [{ cause: 'CPF já cadastrado na base de dados' }],
+        HttpStatus.CONFLICT,
+      );
     }
     const createdUser = await this.prisma.user.create({
       data: userData,
@@ -44,7 +49,7 @@ export class UserService {
     if (!existingUser) {
       throw new NotFoundException('Usuário não encontrado');
     }
-    return existingUser
+    return existingUser;
   }
 
   async put(id: number, user) {
