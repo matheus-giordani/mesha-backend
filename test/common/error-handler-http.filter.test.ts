@@ -22,8 +22,8 @@ describe('FilterExecptionHTTP', () => {
     };
 
     mockHost = {
-        switchToHttp: jest.fn().mockReturnThis(),
-        getResponse: jest.fn().mockReturnValue(mockResponse),
+      switchToHttp: jest.fn().mockReturnThis(),
+      getResponse: jest.fn().mockReturnValue(mockResponse),
     } as unknown as ArgumentsHost;
 
     filter = new FilterExecptionHTTP(httpAdapterHost);
