@@ -1,14 +1,10 @@
 import { ApiError } from './../../src/utils/MsgError';
 /* eslint-disable prefer-const */
 import { NotFoundException } from '@nestjs/common';
-import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
-import { FilterExecptionHTTP } from './../../src/common/error-handler/error-handler-http.filter';
-import { PrismaExceptionFilter } from './../../src/common/error-handler/prisma-handler.filter';
-import { PrismaService } from './../../src/common/prisma.service';
-import { ValidationPipe } from './../../src/common/validation.pipe';
-import { UserService } from './../../src/user/user.service';
 import { returnMockGet } from '../mock/userService/userGet.mock';
+import { PrismaService } from './../../src/common/prisma.service';
+import { UserService } from './../../src/user/user.service';
 import { returnMockGetAll } from './../mock/userService/userGetAll.mock';
 import {
   MockRegisteredUser, mockUser,
@@ -18,26 +14,29 @@ import { putUserMock, returnPutExistingUser, returnPutMock } from './../mock/use
 
 describe('UserService', () => {
   let userService: UserService;
-  let prismaService: PrismaService;
+  let prismaService = {
+    user: {
+      findMany: jest.fn(),
+      findUnique: jest.fn(),
+      create: jest.fn(),
+      update: jest.fn(),
+      
+    },
+    conhecimento:{
+      createMany: jest.fn(),
+      deleteMany: jest.fn(),
+    }
+  }
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [
-        {
-          provide: APP_PIPE,
-          useClass: ValidationPipe,
-        },
-        {
-          provide: APP_FILTER,
-          useClass: FilterExecptionHTTP,
-        },
-        { provide: APP_FILTER, useClass: PrismaExceptionFilter },
-
-        UserService,
-        PrismaService,
-      ],
-    }).compile();
+      providers: [ UserService, PrismaService,]
+      
+    })
+    .overrideProvider(PrismaService)
+    .useValue(prismaService)
+    .compile();
     userService = moduleRef.get<UserService>(UserService);
-    prismaService = moduleRef.get<PrismaService>(PrismaService);
+    
   });
 
   describe('getAll', () => {

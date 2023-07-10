@@ -1,25 +1,34 @@
 import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppModule } from "./../../src/app.module";
+import { PrismaService } from "./../../src/common/prisma.service";
 import * as supertest from 'supertest';
+import { getAllMock } from "../mock/usercontroller/getAllController.mock";
+import { getMock } from "../mock/usercontroller/getController.mock";
+import { postMock } from "../mock/usercontroller/postController.mock";
+import { PutMock } from "../mock/usercontroller/putController.mock";
+import { AppModule } from "./../../src/app.module";
 import { UserService } from './../../src/user/user.service';
-import { getAllMock } from "./../mock/usercontroller/getAllController.mock";
-import { returnMockGetAll } from "./../mock/userService/userGetAll.mock";
 import { returnMockGet } from "./../mock/userService/userGet.mock";
-import { getMock } from "./../mock/usercontroller/getController.mock";
+import { returnMockGetAll } from "./../mock/userService/userGetAll.mock";
 import { mockUser, returnMockCreate } from "./../mock/userService/userPost.mock";
-import { postMock } from "./../mock/usercontroller/postController.mock";
 import { putUserMock, returnPutMock } from "./../mock/userService/userPut.mock";
-import { PutMock } from "./../mock/usercontroller/putController.mock";
+
 
 describe("UserController", ()=>{
     let app: INestApplication
     let userService: UserService
     let moduleRef: TestingModule
+    const prismaService = {
+        onModuleInit: jest.fn(),
+        enableShutdownHooks: jest.fn()
+    }
     beforeAll(async ()=>{
         moduleRef = await Test.createTestingModule({
             imports: [AppModule],
-          }).compile();
+          })
+          .overrideProvider(PrismaService)
+          .useValue(prismaService)
+          .compile();
           
           app = moduleRef.createNestApplication();
           await app.init();
@@ -36,7 +45,7 @@ describe("UserController", ()=>{
             const response = await supertest(app.getHttpServer()).get('/user').expect(200)
             const users = response.body
             expect(users).toStrictEqual(getAllMock)
-            return 
+           
                 
         },10000)
     })
