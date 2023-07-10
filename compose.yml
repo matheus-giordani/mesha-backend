@@ -37,6 +37,7 @@ services:
       - .:/usr/api/prisma
     command: >
         sh -c "/usr/local/bin/wait-for-it.sh dockerpostgresql:5432 --timeout=60 &&
+        ls -a &&
         npx prisma migrate dev --name init &&
         npx nest start --watch"
     depends_on:
