@@ -61,4 +61,5 @@ export class UserDTO {
   @IsNotEmpty()
   @ApiProperty({ example: 'validado', description: 'status user' })
   readonly validacao: string;
+  
 }
